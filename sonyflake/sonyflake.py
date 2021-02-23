@@ -1,9 +1,9 @@
-from multiprocessing import Lock
-from socket import gethostname, gethostbyname
-from time import sleep
-from typing import Callable, Dict, Optional
 import datetime
 import ipaddress
+from multiprocessing import Lock
+from socket import gethostbyname, gethostname
+from time import sleep
+from typing import Callable, Dict, Optional
 
 BIT_LEN_TIME = 39
 BIT_LEN_SEQUENCE = 8
