@@ -50,7 +50,7 @@ class SonyFlakeTestCase(TestCase):
         last_id = 0
         current = initial = self._current_time()
         max_sequence = 0
-        while (current - initial) < 100:
+        while (current - initial) < 1000:
             next_id = self.sf.next_id()
             parts = SonyFlake.decompose(next_id)
             self.assertLess(last_id, next_id, "Duplicated id")
