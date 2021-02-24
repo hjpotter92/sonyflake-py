@@ -14,3 +14,4 @@ jobs:
         uses: isort/isort-action@v0.1.0
         with:
           isortVersion: 5.7.0
+          args: --profile black --diff --check-only

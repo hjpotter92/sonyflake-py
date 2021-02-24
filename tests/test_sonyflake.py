@@ -4,8 +4,7 @@ from random import randint
 from time import sleep
 from unittest import TestCase
 
-from sonyflake.sonyflake import (BIT_LEN_SEQUENCE, SonyFlake,
-                                 lower_16bit_private_ip)
+from sonyflake.sonyflake import BIT_LEN_SEQUENCE, SonyFlake, lower_16bit_private_ip
 
 
 class SonyFlakeTestCase(TestCase):
