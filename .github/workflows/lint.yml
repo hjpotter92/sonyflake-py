@@ -1,6 +1,8 @@
 name: Lint check project
 
-on: push
+on:
+  - push
+  - pull_request
 
 jobs:
   deploy:
@@ -14,4 +16,4 @@ jobs:
         uses: isort/isort-action@v0.1.0
         with:
           isortVersion: 5.7.0
-          args: --profile black --diff --check-only
+          configuration: --profile black --diff --check-only
