@@ -1,5 +1,4 @@
-import multiprocessing
-from collections import Counter
+import threading
 from datetime import datetime, timedelta
 from random import randint
 from time import sleep
@@ -64,3 +63,16 @@ class SonyFlakeTestCase(TestCase):
         self.assertEqual(
             max_sequence, (1 << BIT_LEN_SEQUENCE) - 1, "Unexpected max sequence"
         )
+
+    def test_sonyflake_in_parallel(self):
+        threads = []
+        results = []
+        for _ in range(10000):
+            thread = threading.Thread(target=lambda: results.append(self.sf.next_id()))
+            thread.start()
+            threads.append(thread)
+        for thread in threads:
+            thread.join()
+        result_set = set(results)
+        self.assertEqual(len(results), len(result_set))
+        self.assertCountEqual(results, result_set)

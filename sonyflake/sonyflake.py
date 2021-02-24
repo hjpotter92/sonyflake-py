@@ -1,7 +1,7 @@
 import datetime
 import ipaddress
-from multiprocessing import Lock
 from socket import gethostbyname, gethostname
+from threading import Lock
 from time import sleep
 from typing import Callable, Dict, Optional
 

@@ -1,7 +1,7 @@
 from typing import Dict
 
 MAJOR: int = 1
-MINOR: int = 0
+MINOR: int = 1
 PATCH: int = 0
 SUFFIX: str = ""
 
