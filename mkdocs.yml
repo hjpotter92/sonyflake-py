@@ -8,11 +8,11 @@ nav:
   - Home: index.md
   - Quick start: quickstart.md
   - Reference: reference.md
-  - Coverage report: coverage.md
+  - Coverage report: https://app.codecov.io/gh/hjpotter92/sonyflake-py
   - Changelog: changelog.md
   - GitHub: https://github.com/hjpotter92/sonyflake-py
 
 plugins:
   - search
-  - coverage
-  # - mkdocstrings
+  - mkdocstrings
+#  - coverage

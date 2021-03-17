@@ -1,3 +1,3 @@
 # `sonyflake.SonyFlake`
 
-::: sonyflake.SonyFlake
+::: sonyflake.sonyflake.SonyFlake

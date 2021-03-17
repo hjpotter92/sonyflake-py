@@ -4,6 +4,7 @@ from setuptools import find_packages, setup
 
 import sonyflake.about as about
 
+
 if __name__ == "__main__":
     setup(
         name=about.NAME,
@@ -26,4 +27,14 @@ if __name__ == "__main__":
             "Topic :: Software Development :: Libraries :: Python Modules",
         ],
         python_requires=">=3.6",
+        project_urls={
+            "Documentation": "https://sonyflake-py.projects.hjpotter92.tech/",
+            "Code coverage": "https://app.codecov.io/gh/hjpotter92/sonyflake-py",
+            "Builds history": "https://travis-ci.com/hjpotter92/sonyflake-py",
+        },
+        tests_require=(
+            "codecov>=2.1.11",
+            "coverage>=5.4",
+            "pytest>=6.2.2",
+        ),
     )
