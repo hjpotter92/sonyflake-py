@@ -1,7 +1,6 @@
 os: linux
 language: python
-cache:
-  - "$HOME/.cache/pip"
+cache: pip
 
 python:
   - "3.6"
@@ -16,7 +15,7 @@ install:
 
 script:
  - coverage run -m pytest
- # - coverage report -m
+ - coverage report -m
  # - coverage html
 
 after_success:

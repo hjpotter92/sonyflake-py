@@ -12,12 +12,19 @@ SONYFLAKE_EPOCH = datetime.datetime(2014, 9, 1, 0, 0, 0, tzinfo=datetime.timezon
 
 
 def lower_16bit_private_ip() -> int:
+    """
+    Returns the lower 16 bits of the private IP address.
+    """
     ip: ipaddress.IPv4Address = ipaddress.ip_address(gethostbyname(gethostname()))
     ip_bytes = ip.packed
     return (ip_bytes[2] << 8) + ip_bytes[3]
 
 
 class SonyFlake:
+    """
+    The distributed unique ID generator.
+    """
+
     def __new__(
         cls,
         start_time: Optional[datetime.datetime] = None,
@@ -36,7 +43,40 @@ class SonyFlake:
                 return None
         return instance
 
-    def __init__(self, start_time: Optional[datetime.datetime] = None, *args, **kwargs):
+    def __init__(
+        self,
+        start_time: Optional[datetime.datetime] = None,
+        machine_id: Optional[Callable[[], int]] = None,
+        check_machine_id: Optional[Callable[[int], bool]] = None,
+    ):
+        """
+        Create a new instance of `SonyFlake` unique ID generator.
+
+        `start_time` is the time since which the Sonyflake time is
+        defined as the elapsed time.
+
+        * If `start_time` is 0, the start time of the SonyFlake is set
+        to _"`2014-09-01 00:00:00 +0000 UTC`"_.
+
+        * If `start_time` is ahead of the current time, SonyFlake is
+        not created.
+
+        `machine_id` returns the unique ID of the Sonyflake instance.
+
+        * If `machine_id` returns an error, SonyFlake is not created.
+
+        * If `machine_id` is nil, default `machine_id` is used.
+
+        * Default `machine_id` returns the lower 16 bits of the
+        private IP address.
+
+        `check_machine_id` validates the uniqueness of the machine ID.
+
+        * If `check_machine_id` returns `False`, SonyFlake is not
+        created.
+
+        * If `check_machine_id` is `None`, no validation is done.
+        """
         if start_time is None:
             start_time = SONYFLAKE_EPOCH
         self.mutex = Lock()
@@ -46,15 +86,31 @@ class SonyFlake:
 
     @staticmethod
     def to_sonyflake_time(given_time: datetime.datetime) -> int:
+        """
+        Convert a `datetime.datetime` object to SonyFlake's time
+        value.
+        """
         return int(given_time.timestamp() * 100)
 
     def current_time(self):
+        """
+        Get current UTC time in the SonyFlake's time value.
+        """
         return self.to_sonyflake_time(datetime.datetime.utcnow())
 
     def current_elapsed_time(self):
+        """
+        Get time elapsed since the SonyFlake ID generator was
+        initialised.
+        """
         return self.current_time() - self.start_time
 
     def next_id(self):
+        """
+        Generates and returns the next unique ID.
+
+        Raises a `TimeoutError` after the `SonyFlake` time overflows.
+        """
         mask_sequence = (1 << BIT_LEN_SEQUENCE) - 1
         with self.mutex:
             current_time = self.current_elapsed_time()
@@ -86,6 +142,9 @@ class SonyFlake:
 
     @staticmethod
     def decompose(_id: int) -> Dict[str, int]:
+        """
+        Decompose returns a set of Sonyflake ID parts.
+        """
         mask_sequence = ((1 << BIT_LEN_SEQUENCE) - 1) << BIT_LEN_MACHINE_ID
         mask_machine_id = (1 << BIT_LEN_MACHINE_ID) - 1
         msb = _id >> 63

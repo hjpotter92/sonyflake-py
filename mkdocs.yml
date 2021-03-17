@@ -1,0 +1,18 @@
+site_name: sonyflake-py
+docs_dir: docs/src
+theme:
+  name: material
+  # custom_dir: docs/theme/
+
+nav:
+  - Home: index.md
+  - Quick start: quickstart.md
+  - Reference: reference.md
+  - Coverage report: coverage.md
+  - Changelog: changelog.md
+  - GitHub: https://github.com/hjpotter92/sonyflake-py
+
+plugins:
+  - search
+  - coverage
+  # - mkdocstrings

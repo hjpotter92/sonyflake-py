@@ -1,0 +1,4 @@
+mkdocs>=1.1.2
+mkdocs-coverage>=0.2.1
+mkdocstrings>=0.15.0
+mkdocs-material>=7.0.6
