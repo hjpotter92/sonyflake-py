@@ -1,14 +1,11 @@
 version: '2'
 formats: all
 
-# python:
-#   version: 3.8
-#   install:
-#     - method: pip
-#       path: .
-#       extra_requirements:
-#         - doc
-#   system_packages: false
+python:
+  version: 3.8
+  install:
+    - requirements: requirements-doc.txt
+  system_packages: false
 
 mkdocs:
   configuration: mkdocs.yml
