@@ -15,4 +15,15 @@ nav:
 plugins:
   - search
   - mkdocstrings
-#  - coverage
+  - minify:
+      minify_html: true
+      htmlmin_opts:
+        remove_empty_space: true
+        remove_comments: true
+        reduce_boolean_attributes: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.keys
+  - pymdownx.superfences
+  - pymdownx.snippets

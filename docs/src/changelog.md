@@ -1,6 +1,12 @@
 Changelog and release history
 -----------------------------
 
+## [1.2.0](https://pypi.org/project/sonyflake-py/1.1.0/) (2021-03-18)
+
+ - Use `@property` for immutable data.
+ - Add self-documentation.
+ - Setup pipeline for readthedocs.
+
 ## [1.1.0](https://pypi.org/project/sonyflake-py/1.1.0/) (2021-02-24)
 
  - Use `threading.Lock` over `multiprocessing.Lock`.

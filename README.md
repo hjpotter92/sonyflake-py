@@ -1,6 +1,7 @@
 # sonyflake-py
 
-[![codecov][codecov-badge]][codecov] [![Build Status][travis-ci-badge]][travis-ci]
+[![codecov][codecov-badge]][codecov] [![Build Status][travis-ci-badge]][travis-ci] [![Documentation Status][readthedocs-badge]][readthedocs]
+
 
 Sonyflake is a distributed unique ID generator inspired by [Twitter's
 Snowflake](https://blog.twitter.com/2010/announcing-snowflake).
@@ -44,5 +45,7 @@ The MIT License (MIT).
 
   [codecov]: https://codecov.io/gh/hjpotter92/sonyflake-py
   [codecov-badge]: https://codecov.io/gh/hjpotter92/sonyflake-py/branch/master/graph/badge.svg?token=XZCRNSSSQK
+  [readthedocs]: http://sonyflake-py.rtfd.io/
+  [readthedocs-badge]: https://readthedocs.org/projects/sonyflake-py/badge/?version=latest
   [travis-ci]: https://travis-ci.com/hjpotter92/sonyflake-py
   [travis-ci-badge]: https://travis-ci.com/hjpotter92/sonyflake-py.svg?branch=master
