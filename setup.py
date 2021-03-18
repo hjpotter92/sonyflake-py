@@ -4,6 +4,7 @@ from setuptools import find_packages, setup
 
 import sonyflake.about as about
 
+
 if __name__ == "__main__":
     setup(
         name=about.NAME,

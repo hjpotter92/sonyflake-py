@@ -35,11 +35,11 @@ class SonyFlake:
             return None
         instance = super().__new__(cls)
         if machine_id is not None:
-            instance.machine_id = machine_id()
+            instance._machine_id = machine_id()
         else:
-            instance.machine_id = lower_16bit_private_ip()
+            instance._machine_id = lower_16bit_private_ip()
         if check_machine_id is not None:
-            if not check_machine_id(instance.machine_id):
+            if not check_machine_id(instance._machine_id):
                 return None
         return instance
 
@@ -52,7 +52,7 @@ class SonyFlake:
         """
         Create a new instance of `SonyFlake` unique ID generator.
 
-        `start_time` is the time since which the Sonyflake time is
+        `start_time` is the time since which the SonyFlake time is
         defined as the elapsed time.
 
         * If `start_time` is 0, the start time of the SonyFlake is set
@@ -61,7 +61,7 @@ class SonyFlake:
         * If `start_time` is ahead of the current time, SonyFlake is
         not created.
 
-        `machine_id` returns the unique ID of the Sonyflake instance.
+        `machine_id` returns the unique ID of the SonyFlake instance.
 
         * If `machine_id` returns an error, SonyFlake is not created.
 
@@ -80,9 +80,11 @@ class SonyFlake:
         if start_time is None:
             start_time = SONYFLAKE_EPOCH
         self.mutex = Lock()
-        self.start_time = self.to_sonyflake_time(start_time)
+        self._start_time = self.to_sonyflake_time(start_time)
         self.elapsed_time = self.current_elapsed_time()
         self.sequence = (1 << BIT_LEN_SEQUENCE) - 1
+        if not hasattr(self, "_machine_id"):
+            self._machine_id = machine_id and machine_id() or lower_16bit_private_ip()
 
     @staticmethod
     def to_sonyflake_time(given_time: datetime.datetime) -> int:
@@ -91,6 +93,14 @@ class SonyFlake:
         value.
         """
         return int(given_time.timestamp() * 100)
+
+    @property
+    def start_time(self):
+        return self._start_time
+
+    @property
+    def machine_id(self):
+        return self._machine_id
 
     def current_time(self):
         """
@@ -128,14 +138,15 @@ class SonyFlake:
     def to_id(self) -> int:
         if self.elapsed_time >= (1 << BIT_LEN_TIME):
             raise TimeoutError("Over the time limit!")
-        return (
-            (self.elapsed_time << (BIT_LEN_SEQUENCE + BIT_LEN_MACHINE_ID))
-            | (self.sequence << BIT_LEN_MACHINE_ID)
-            | self.machine_id
-        )
+        time = self.elapsed_time << (BIT_LEN_SEQUENCE + BIT_LEN_MACHINE_ID)
+        sequence = self.sequence << BIT_LEN_MACHINE_ID
+        return time | sequence | self.machine_id
 
     @staticmethod
     def sleep_time(duration: int) -> float:
+        """
+        Calculate the time remaining until generation of new ID.
+        """
         return (
             duration * 10 - (datetime.datetime.utcnow().timestamp() * 100) % 1
         ) / 100
@@ -143,7 +154,7 @@ class SonyFlake:
     @staticmethod
     def decompose(_id: int) -> Dict[str, int]:
         """
-        Decompose returns a set of Sonyflake ID parts.
+        Decompose returns a set of SonyFlake ID parts.
         """
         mask_sequence = ((1 << BIT_LEN_SEQUENCE) - 1) << BIT_LEN_MACHINE_ID
         mask_machine_id = (1 << BIT_LEN_MACHINE_ID) - 1

@@ -1,4 +1,4 @@
-## Quickstart
+# Quickstart
 
 ``` python
 from sonyflake import SonyFlake
