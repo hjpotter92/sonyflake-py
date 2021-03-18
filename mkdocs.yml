@@ -2,7 +2,23 @@ site_name: sonyflake-py
 docs_dir: docs/src
 theme:
   name: material
+  palette:
+    scheme: slate
+  features:
+    - search.suggest
+    - search.highlight
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
   # custom_dir: docs/theme/
+
+repo_url: https://github.com/hjpotter92/sonyflake-py
+repo_name: hjpotter92/sonyflake-py
+
+extra:
+  version:
+    provider: mike
 
 nav:
   - Home: index.md
@@ -10,10 +26,10 @@ nav:
   - Reference: reference.md
   - Coverage report: https://app.codecov.io/gh/hjpotter92/sonyflake-py
   - Changelog: changelog.md
-  - GitHub: https://github.com/hjpotter92/sonyflake-py
 
 plugins:
-  - search
+  - search:
+      separator: '[-.\s]+'
   - mkdocstrings
   - minify:
       minify_html: true
@@ -21,6 +37,7 @@ plugins:
         remove_empty_space: true
         remove_comments: true
         reduce_boolean_attributes: true
+  - git-revision-date
 
 markdown_extensions:
   - pymdownx.highlight

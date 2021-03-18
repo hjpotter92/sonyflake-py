@@ -3,3 +3,4 @@ mkdocs-coverage>=0.2.1
 mkdocstrings>=0.15.0
 mkdocs-material>=7.0.6
 mkdocs-minify-plugin>=0.4.0
+mkdocs-git-revision-date-plugin>=0.3.1
