@@ -1,7 +1,13 @@
 Changelog and release history
 -----------------------------
 
-## [1.2.0](https://pypi.org/project/sonyflake-py/1.1.0/) (2021-03-18)
+## [1.2.1](https://pypi.org/project/sonyflake-py/1.2.1/) (2021-03-20)
+
+ - Update links for documentation.
+ - Add release notes to pypi page.
+ - Update contact email address.
+
+## [1.2.0](https://pypi.org/project/sonyflake-py/1.2.0/) (2021-03-18)
 
  - Use `@property` for immutable data.
  - Add self-documentation.

@@ -2,14 +2,14 @@ from typing import Dict
 
 MAJOR: int = 1
 MINOR: int = 2
-PATCH: int = 0
+PATCH: int = 1
 SUFFIX: str = ""
 
 NAME: str = "sonyflake-py"
 
 AUTHOR: Dict[str, str] = {
     "name": "hjpotter92",
-    "email": "hjpotter92+pypi@gmail.com",
+    "email": f"{NAME}@pypi.hjpotter92.email",
 }
 MAINTAINER: Dict[str, str] = AUTHOR
 
