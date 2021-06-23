@@ -1,5 +1,5 @@
 import threading
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from random import randint
 from time import sleep
 from unittest import TestCase
@@ -9,14 +9,14 @@ from sonyflake.sonyflake import BIT_LEN_SEQUENCE, SonyFlake, lower_16bit_private
 
 class SonyFlakeTestCase(TestCase):
     def setUp(self):
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         self.sf = SonyFlake(start_time)
         self.start_time = SonyFlake.to_sonyflake_time(start_time)
         self.machine_id = lower_16bit_private_ip()
 
     @staticmethod
     def _current_time():
-        return SonyFlake.to_sonyflake_time(datetime.utcnow())
+        return SonyFlake.to_sonyflake_time(datetime.now(timezone.utc))
 
     @staticmethod
     def _sleep(duration):
@@ -33,7 +33,7 @@ class SonyFlakeTestCase(TestCase):
         self.assertEqual(parts["machine_id"], self.machine_id)
 
     def test_sonyflake_future(self):
-        future_start_time = datetime.utcnow() + timedelta(minutes=1)
+        future_start_time = datetime.now(timezone.utc) + timedelta(minutes=1)
         sonyflake = SonyFlake(start_time=future_start_time)
         self.assertIsNone(sonyflake, "SonyFlake starting in the future")
 
