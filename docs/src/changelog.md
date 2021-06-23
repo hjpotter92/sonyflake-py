@@ -1,6 +1,10 @@
 Changelog and release history
 -----------------------------
 
+## latest
+
+ - Fix timezone usage inconsistencies.
+
 ## [1.2.1](https://pypi.org/project/sonyflake-py/1.2.1/) (2021-03-20)
 
  - Update links for documentation.
