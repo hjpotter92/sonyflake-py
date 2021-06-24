@@ -4,6 +4,7 @@ Changelog and release history
 ## latest
 
  - Fix timezone usage inconsistencies.
+ - Make a package PEP-561 compliant.
 
 ## [1.2.1](https://pypi.org/project/sonyflake-py/1.2.1/) (2021-03-20)
 

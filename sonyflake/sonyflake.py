@@ -26,6 +26,9 @@ class SonyFlake:
     The distributed unique ID generator.
     """
 
+    _start_time: int
+    _machine_id: int
+
     def __new__(
         cls,
         start_time: Optional[datetime.datetime] = None,
@@ -49,7 +52,7 @@ class SonyFlake:
         start_time: Optional[datetime.datetime] = None,
         machine_id: Optional[Callable[[], int]] = None,
         check_machine_id: Optional[Callable[[int], bool]] = None,
-    ):
+    ) -> None:
         """
         Create a new instance of `SonyFlake` unique ID generator.
 
@@ -96,27 +99,27 @@ class SonyFlake:
         return int(given_time.timestamp() * 100)
 
     @property
-    def start_time(self):
+    def start_time(self) -> int:
         return self._start_time
 
     @property
-    def machine_id(self):
+    def machine_id(self) -> int:
         return self._machine_id
 
-    def current_time(self):
+    def current_time(self) -> int:
         """
         Get current UTC time in the SonyFlake's time value.
         """
         return self.to_sonyflake_time(datetime.datetime.now(UTC))
 
-    def current_elapsed_time(self):
+    def current_elapsed_time(self) -> int:
         """
         Get time elapsed since the SonyFlake ID generator was
         initialised.
         """
         return self.current_time() - self.start_time
 
-    def next_id(self):
+    def next_id(self) -> int:
         """
         Generates and returns the next unique ID.
 

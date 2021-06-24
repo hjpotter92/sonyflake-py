@@ -15,6 +15,7 @@ if __name__ == "__main__":
         long_description_content_type="text/markdown",
         url="https://github.com/hjpotter92/sonyflake-py",
         packages=find_packages(),
+        package_data={"sonyflake": ["py.typed"]},
         include_package_data=True,
         classifiers=[
             "Development Status :: 5 - Production/Stable",
