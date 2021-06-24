@@ -38,8 +38,10 @@ class SonyFlakeTestCase(TestCase):
 
     def test_sonyflake_custom_machine_id(self):
         machine_id = randint(1, 255 ** 2)
+
         def get_machine_id():
             return machine_id
+
         sf = SonyFlake(machine_id=get_machine_id)
         next_id = sf.next_id()
         parts = SonyFlake.decompose(next_id)
