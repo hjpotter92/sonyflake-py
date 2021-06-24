@@ -1,10 +1,11 @@
 Changelog and release history
 -----------------------------
 
-## latest
+## [1.3.0](https://pypi.org/project/sonyflake-py/1.3.0/) (2021-06-24)
 
  - Fix timezone usage inconsistencies.
  - Make a package PEP-561 compliant.
+ - Add test case for initialisation using `SONYFLAKE_EPOCH` constant.
 
 ## [1.2.1](https://pypi.org/project/sonyflake-py/1.2.1/) (2021-03-20)
 

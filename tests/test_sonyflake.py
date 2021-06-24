@@ -4,7 +4,12 @@ from random import randint
 from time import sleep
 from unittest import TestCase
 
-from sonyflake.sonyflake import BIT_LEN_SEQUENCE, SonyFlake, lower_16bit_private_ip
+from sonyflake.sonyflake import (
+    BIT_LEN_SEQUENCE,
+    SONYFLAKE_EPOCH,
+    SonyFlake,
+    lower_16bit_private_ip,
+)
 
 
 class SonyFlakeTestCase(TestCase):
@@ -21,6 +26,24 @@ class SonyFlakeTestCase(TestCase):
     @staticmethod
     def _sleep(duration):
         return sleep(duration / 100)
+
+    def test_sonyflake_epoch(self):
+        sf = SonyFlake(start_time=SONYFLAKE_EPOCH)
+        self.assertEqual(sf.start_time, 140952960000)
+        next_id = sf.next_id()
+        parts = SonyFlake.decompose(next_id)
+        self.assertEqual(parts["msb"], 0)
+        self.assertEqual(parts["machine_id"], self.machine_id)
+        self.assertEqual(parts["sequence"], 0)
+
+    def test_sonyflake_custom_machine_id(self):
+        machine_id = randint(1, 255 ** 2)
+        def get_machine_id():
+            return machine_id
+        sf = SonyFlake(machine_id=get_machine_id)
+        next_id = sf.next_id()
+        parts = SonyFlake.decompose(next_id)
+        self.assertEqual(parts["machine_id"], machine_id)
 
     def test_sonyflake_once(self):
         sleep_time = randint(1, 50)

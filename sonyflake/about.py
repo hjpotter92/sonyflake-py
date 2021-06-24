@@ -16,6 +16,6 @@ MAINTAINER: Dict[str, str] = AUTHOR
 __version__: str = f"{MAJOR}.{MINOR}.{PATCH}"
 
 if SUFFIX:
-    __version__ += SUFFIX
+    __version__ += f"-{SUFFIX}"
 
 VERSION = __version__
