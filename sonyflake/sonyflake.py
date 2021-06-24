@@ -8,7 +8,8 @@ from typing import Callable, Dict, Optional
 BIT_LEN_TIME = 39
 BIT_LEN_SEQUENCE = 8
 BIT_LEN_MACHINE_ID = 63 - (BIT_LEN_TIME + BIT_LEN_SEQUENCE)
-SONYFLAKE_EPOCH = datetime.datetime(2014, 9, 1, 0, 0, 0, tzinfo=datetime.timezone.utc)
+UTC = datetime.timezone.utc
+SONYFLAKE_EPOCH = datetime.datetime(2014, 9, 1, 0, 0, 0, tzinfo=UTC)
 
 
 def lower_16bit_private_ip() -> int:
@@ -31,7 +32,7 @@ class SonyFlake:
         machine_id: Optional[Callable[[], int]] = None,
         check_machine_id: Optional[Callable[[int], bool]] = None,
     ):
-        if start_time and datetime.datetime.utcnow() < start_time:
+        if start_time and datetime.datetime.now(UTC) < start_time:
             return None
         instance = super().__new__(cls)
         if machine_id is not None:
@@ -106,7 +107,7 @@ class SonyFlake:
         """
         Get current UTC time in the SonyFlake's time value.
         """
-        return self.to_sonyflake_time(datetime.datetime.utcnow())
+        return self.to_sonyflake_time(datetime.datetime.now(UTC))
 
     def current_elapsed_time(self):
         """
@@ -148,7 +149,7 @@ class SonyFlake:
         Calculate the time remaining until generation of new ID.
         """
         return (
-            duration * 10 - (datetime.datetime.utcnow().timestamp() * 100) % 1
+            duration * 10 - (datetime.datetime.now(UTC).timestamp() * 100) % 1
         ) / 100
 
     @staticmethod
