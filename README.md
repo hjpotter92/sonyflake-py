@@ -35,8 +35,8 @@ The generator can be configured with variety of options, such as
 custom `machine_id`, `start_time` etc.
 
 - `start_time` should be an instance of `datetime.datetime`.
-- `machine_id` should be a callable which returns an integer value
-  upto 16-bits.
+- `machine_id` should be an integer value upto 16-bits, callable or
+  `None` (will be used random machine id).
 
 ## License
 
