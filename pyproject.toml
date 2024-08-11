@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sonyflake-py"
+authors = [
+    {name = "hjpotter92", email = "hjpotter92@pypi.hjpotter92.email"},
+]
+description = "A distributed unique ID generator inspired by Twitter's Snowflake."
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {file = "LICENSE"}
+requires-python = ">=3.6"
+keywords = ["id-generator", "snowflake", "sonyflake", "unique-id"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Distributed Computing",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/hjpotter92/sonyflake-py"
+Documentation = "https://sonyflake-py.rtfd.io/"
+Changelog = "https://sonyflake-py.rtfd.io/changelog"
+"Code coverage" = "https://app.codecov.io/gh/hjpotter92/sonyflake-py"
+"Builds history" = "https://travis-ci.com/hjpotter92/sonyflake-py"
+
+[tool.setuptools.dynamic]
+version = {attr = "sonyflake.about.VERSION"}
+
+[tool.pytest.ini_options]
+minversion = "6.2"
+addopts = ["-vv"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+source_pkgs = ["sonyflake"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint.format]
+max-line-length = "88"
