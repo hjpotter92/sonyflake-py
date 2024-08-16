@@ -9,14 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
       - name: Black Check
-        uses: jpetrucciani/black-check@20.8b1
+        uses: jpetrucciani/black-check@24.8.0
       - name: python-isort
-        uses: isort/isort-action@v0.1.0
+        uses: isort/isort-action@v1
         with:
-          isortVersion: 5.7.0
+          isort-version: 5.13.2
           configuration: --profile black --diff --check-only

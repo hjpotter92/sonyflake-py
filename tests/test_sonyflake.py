@@ -4,20 +4,23 @@ from random import randint
 from time import sleep
 from unittest import TestCase
 
+from pytest import raises
+
 from sonyflake.sonyflake import (
     BIT_LEN_SEQUENCE,
     SONYFLAKE_EPOCH,
     SonyFlake,
     lower_16bit_private_ip,
+    random_machine_id,
 )
 
 
 class SonyFlakeTestCase(TestCase):
     def setUp(self):
         start_time = datetime.now(timezone.utc)
-        self.sf = SonyFlake(start_time)
+        self.machine_id = 0x7F7F
+        self.sf = SonyFlake(start_time, machine_id=self.machine_id)
         self.start_time = SonyFlake.to_sonyflake_time(start_time)
-        self.machine_id = lower_16bit_private_ip()
 
     @staticmethod
     def _current_time():
@@ -28,7 +31,10 @@ class SonyFlakeTestCase(TestCase):
         return sleep(duration / 100)
 
     def test_sonyflake_epoch(self):
-        sf = SonyFlake(start_time=SONYFLAKE_EPOCH)
+        sf = SonyFlake(
+            start_time=SONYFLAKE_EPOCH,
+            machine_id=self.machine_id,
+        )
         self.assertEqual(sf.start_time, 140952960000)
         next_id = sf.next_id()
         parts = SonyFlake.decompose(next_id)
@@ -37,12 +43,9 @@ class SonyFlakeTestCase(TestCase):
         self.assertEqual(parts["sequence"], 0)
 
     def test_sonyflake_custom_machine_id(self):
-        machine_id = randint(1, 255 ** 2)
+        machine_id = randint(1, 255**2)
 
-        def get_machine_id():
-            return machine_id
-
-        sf = SonyFlake(machine_id=get_machine_id)
+        sf = SonyFlake(machine_id=machine_id)
         next_id = sf.next_id()
         parts = SonyFlake.decompose(next_id)
         self.assertEqual(parts["machine_id"], machine_id)
@@ -59,15 +62,16 @@ class SonyFlakeTestCase(TestCase):
 
     def test_sonyflake_future(self):
         future_start_time = datetime.now(timezone.utc) + timedelta(minutes=1)
-        sonyflake = SonyFlake(start_time=future_start_time)
-        self.assertIsNone(sonyflake, "SonyFlake starting in the future")
+
+        with raises(ValueError, match=r"start_time cannot be in future"):
+            SonyFlake(start_time=future_start_time)
 
     def test_sonyflake_invalid_machine_id(self):
-        def check_machine_id(_: int) -> bool:
-            return False
-
-        sonyflake = SonyFlake(check_machine_id=check_machine_id)
-        self.assertIsNone(sonyflake, "Machine ID check failed")
+        for machine_id in [-1, 0xFFFF + 1]:
+            with raises(
+                ValueError, match=r"machine_id must be in range \[0x0000, 0xFFFF\]"
+            ):
+                SonyFlake(machine_id=machine_id)
 
     def test_sonyflake_for_10sec(self):
         last_id = 0
@@ -100,3 +104,11 @@ class SonyFlakeTestCase(TestCase):
         result_set = set(results)
         self.assertEqual(len(results), len(result_set))
         self.assertCountEqual(results, result_set)
+
+
+def test_random_machine_id() -> None:
+    assert random_machine_id()
+
+
+def test_lower_16bit_private_ip() -> None:
+    assert lower_16bit_private_ip()
