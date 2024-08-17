@@ -5,7 +5,7 @@ from random import randrange
 from socket import gethostbyname, gethostname
 from threading import Lock
 from time import sleep
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Dict, Iterator, Optional, Union
 from warnings import warn
 
 BIT_LEN_TIME = 39
@@ -28,13 +28,17 @@ def lower_16bit_private_ip() -> int:
     return (ip_bytes[2] << 8) + ip_bytes[3]
 
 
-class SonyFlake:
+class SonyFlake(Iterator[int]):
     """
     The distributed unique ID generator.
     """
 
+    _now: Callable[[], datetime.datetime]
+    mutex: Lock
     _start_time: int
     _machine_id: int
+    elapsed_time: int
+    sequence: int
 
     __slots__ = (
         "_now",
@@ -147,6 +151,8 @@ class SonyFlake:
                     overtime = self.elapsed_time - current_time
                     sleep(self.sleep_time(overtime, self._now()))
             return self.to_id()
+
+    __next__ = next_id
 
     def to_id(self) -> int:
         if self.elapsed_time >= (1 << BIT_LEN_TIME):
