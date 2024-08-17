@@ -1,11 +1,11 @@
 import datetime
 import ipaddress
 from functools import partial
-from random import randrange
+from random import randrange, sample
 from socket import gethostbyname, gethostname
 from threading import Lock
 from time import sleep
-from typing import Any, Callable, Dict, Iterator, Optional, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 from warnings import warn
 
 BIT_LEN_TIME = 39
@@ -17,6 +17,21 @@ SONYFLAKE_EPOCH = datetime.datetime(2014, 9, 1, 0, 0, 0, tzinfo=UTC)
 random_machine_id = partial(randrange, 0, MAX_MACHINE_ID + 1)
 random_machine_id.__doc__ = "Returns a random machine ID."
 utc_now = partial(datetime.datetime.now, tz=UTC)
+
+
+def random_machine_ids(n: int) -> List[int]:
+    """
+    Returns a list of `n` random machine IDs.
+
+    `n` must be in range (0, 0xFFFF].
+
+    Returned list is sorted in ascending order, without duplicates.
+    """
+
+    if not (0 < n <= MAX_MACHINE_ID):
+        raise ValueError(f"n must be in range (0, {MAX_MACHINE_ID}]")
+
+    return sorted(sample(range(0, MAX_MACHINE_ID + 1), n))
 
 
 def lower_16bit_private_ip() -> int:
