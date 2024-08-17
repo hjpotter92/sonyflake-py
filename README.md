@@ -38,6 +38,20 @@ custom `machine_id`, `start_time` etc.
 - `machine_id` should be an integer value upto 16-bits, callable or
   `None` (will be used random machine id).
 
+If you need to generate ids at rate more than 256ids/10msec, you can use the `RoundRobin` wrapper over multiple `SonyFlake` instances:
+
+``` python
+from timeit import timeit
+from sonyflake import RoundRobin, SonyFlake, random_machine_ids
+sf = RoundRobin([SonyFlake(machine_id=_id) for _id in random_machine_ids(10)])
+t = timeit(sf.next_id, number=100000)
+print(f"generated 100000 ids in {t:.2f} seconds")
+```
+
+> :warning: This increases the chance of collisions, so be careful when using random machine IDs.
+
+For convenience, both `SonyFlake` and `RoundRobin` implement iterator protocol (`next(sf)`).
+
 ## License
 
 The MIT License (MIT).

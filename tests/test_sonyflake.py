@@ -4,7 +4,7 @@ from random import randint
 from time import sleep
 from unittest import TestCase
 
-from pytest import raises
+from pytest import mark, raises
 
 from sonyflake.sonyflake import (
     BIT_LEN_SEQUENCE,
@@ -12,6 +12,7 @@ from sonyflake.sonyflake import (
     SonyFlake,
     lower_16bit_private_ip,
     random_machine_id,
+    random_machine_ids,
 )
 
 
@@ -108,6 +109,19 @@ class SonyFlakeTestCase(TestCase):
 
 def test_random_machine_id() -> None:
     assert random_machine_id()
+
+
+@mark.parametrize("n", [1, 1024, 65535])
+def test_random_machine_ids(n: int) -> None:
+    machine_ids = random_machine_ids(n)
+    assert len(set(machine_ids)) == n
+    assert sorted(machine_ids) == machine_ids
+
+
+@mark.parametrize("n", [0, 65536])
+def test_random_machine_ids_edges(n: int) -> None:
+    with raises(ValueError, match=r"n must be in range \(0, 65535\]"):
+        random_machine_ids(n)
 
 
 def test_lower_16bit_private_ip() -> None:

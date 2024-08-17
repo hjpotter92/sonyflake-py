@@ -1,11 +1,11 @@
 import datetime
 import ipaddress
 from functools import partial
-from random import randrange
+from random import randrange, sample
 from socket import gethostbyname, gethostname
 from threading import Lock
 from time import sleep
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 from warnings import warn
 
 BIT_LEN_TIME = 39
@@ -19,6 +19,21 @@ random_machine_id.__doc__ = "Returns a random machine ID."
 utc_now = partial(datetime.datetime.now, tz=UTC)
 
 
+def random_machine_ids(n: int) -> List[int]:
+    """
+    Returns a list of `n` random machine IDs.
+
+    `n` must be in range (0, 0xFFFF].
+
+    Returned list is sorted in ascending order, without duplicates.
+    """
+
+    if not (0 < n <= MAX_MACHINE_ID):
+        raise ValueError(f"n must be in range (0, {MAX_MACHINE_ID}]")
+
+    return sorted(sample(range(0, MAX_MACHINE_ID + 1), n))
+
+
 def lower_16bit_private_ip() -> int:
     """
     Returns the lower 16 bits of the private IP address.
@@ -28,13 +43,17 @@ def lower_16bit_private_ip() -> int:
     return (ip_bytes[2] << 8) + ip_bytes[3]
 
 
-class SonyFlake:
+class SonyFlake(Iterator[int]):
     """
     The distributed unique ID generator.
     """
 
+    _now: Callable[[], datetime.datetime]
+    mutex: Lock
     _start_time: int
     _machine_id: int
+    elapsed_time: int
+    sequence: int
 
     __slots__ = (
         "_now",
@@ -147,6 +166,8 @@ class SonyFlake:
                     overtime = self.elapsed_time - current_time
                     sleep(self.sleep_time(overtime, self._now()))
             return self.to_id()
+
+    __next__ = next_id
 
     def to_id(self) -> int:
         if self.elapsed_time >= (1 << BIT_LEN_TIME):
